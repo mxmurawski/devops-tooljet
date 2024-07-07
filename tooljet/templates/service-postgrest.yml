@@ -1,0 +1,16 @@
+{{- if .Values.postgrest.enable }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.masterName }}-postgrest-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.masterName }}-postgrest
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.env.PGRST_SERVER_PORT }}
+    targetPort: {{ .Values.env.PGRST_SERVER_PORT }}
+  selector:
+    app: {{ .Values.masterName }}-postgrest
+{{- end }}

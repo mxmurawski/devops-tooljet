@@ -1,0 +1,16 @@
+{{- if .Values.postgres.enable }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.masterName }}-postgres-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.masterName }}-postgres
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432 
+    targetPort: 5432
+  selector:
+    app: {{ .Values.masterName }}-postgres
+{{- end }}

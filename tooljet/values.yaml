@@ -1,0 +1,94 @@
+masterName: tooljet
+namespace: tooljet
+
+postgrest:
+  enable: true
+  replicaCount: 1
+  image: postgrest/postgrest
+  tag: v12.0.2
+
+redis:
+  enable: true
+  replicaCount: 1
+  image: redis
+  tag: latest
+  volumeSize: 1Gi
+
+postgres:
+  enable: true
+  replicaCount: 1
+  image: postgres
+  tag: latest
+  postgresPassword: 
+  volumeSize: 1Gi
+
+tooljet:
+  replicaCount: 1
+  image: tooljet/tooljet-ee
+  tag: latest
+
+postgrestResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+tooljetResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+redisResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+postgresResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+env:
+  TOOLJET_HOST: 
+  LOCKBOX_MASTER_KEY: 
+  SECRET_KEY_BASE: 
+  PG_DB: 
+  PG_USER: 
+  PG_HOST: 
+  PG_PASS: 
+  PG_PORT: 5432
+  ENABLE_TOOLJET_DB: 
+  TOOLJET_DB: 
+  TOOLJET_DB_USER: 
+  TOOLJET_DB_HOST: 
+  TOOLJET_DB_PASS: 
+  PGRST_HOST: 
+  PGRST_DB_URI: 
+  PGRST_JWT_SECRET: 
+  REDIS_HOST: 
+  REDIS_PORT: 6379
+  SERVE_CLIENT: 
+  PORT: 3000
+  PGRST_SERVER_PORT: 3000
+  ORM_LOGGING: 
+  DISABLE_TOOLJET_TELEMETRY: 
+  SMTP_PORT: 
+  SMTP_DOMAIN: 
+  SMTP_USERNAME: 
+  SMTP_PASSWORD: 
+  DEFAULT_FROM_EMAIL: 
+
+ingress-tooljet:
+  hostname: 
+  annotations:

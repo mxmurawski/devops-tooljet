@@ -1,0 +1,44 @@
+{{- if .Values.redis.enable }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.masterName }}-redis-statefulset
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.masterName }}-redis
+spec:
+  serviceName: {{ .Values.masterName }}-redis-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.masterName }}-redis
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.masterName }}-redis
+    spec:
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image }}:{{ .Values.redis.tag }}
+          args:
+            - "--save 900 1 300 10 60 10000"
+            - "--dir /redis-data"
+            - "--dbfilename dump.rdb"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: {{ .Values.redisResources.requests.cpu }}
+              memory: {{ .Values.redisResources.requests.memory }}
+            limits:
+              cpu: {{ .Values.redisResources.limits.cpu }}
+              memory: {{ .Values.redisResources.limits.memory }}
+          volumeMounts:
+            - name: redis-data
+              mountPath: /redis-data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.masterName }}-redis-pvc
+{{- end }}

@@ -1,0 +1,95 @@
+masterName:  tooljet # do not change it
+namespace: tooljet
+
+postgrest:
+  enable: true
+  replicaCount: 1
+  image: postgrest/postgrest
+  tag: v12.0.2
+
+redis:
+  enable: true
+  replicaCount: 1
+  image: redis
+  tag: latest
+  volumeSize: 1Gi
+
+postgres:
+  enable: true
+  replicaCount: 1
+  image: postgres
+  tag: latest
+  postgresPassword: supersecretpassword
+  volumeSize: 1Gi
+
+tooljet:
+  replicaCount: 1
+  image: tooljet/tooljet-ee
+  tag: latest
+
+postgrestResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+tooljetResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+redisResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+postgresResources:
+  requests:
+    memory: "200Mi"
+    cpu: 0.2
+  limits:
+    memory: "500Mi"
+    cpu: 0.4
+
+env:
+  TOOLJET_HOST: https://tooljet.k8s.ad.mikolajmurawski.pl # ensure that the hostname is the same as ingress.hostname and the protocol is https
+  LOCKBOX_MASTER_KEY: fa141a5354a3ddf9c2c6a142c3dd717ab093329e235ece428ba35039817c13d8 # openssl rand -hex 32
+  SECRET_KEY_BASE: e48f18a24c9bfc6efbd52e82fda15e5c2065b0b9844417c3e93cf8559c2baf5e4be670453e2c36a58effc3713f3106710d4aae100dae744183d09879a0582e82 # openssl rand -hex 64
+  PG_DB: tooljet_db
+  PG_USER: postgres # do not change it
+  PG_HOST: tooljet-postgres-service # do not change it
+  PG_PASS: supersecretpassword
+  PG_PORT: 5432
+  ENABLE_TOOLJET_DB: true
+  TOOLJET_DB: tooljet_applications_db
+  TOOLJET_DB_USER: postgres # do not change it
+  TOOLJET_DB_HOST: tooljet-postgres-service # do not change it
+  TOOLJET_DB_PASS: supersecretpassword
+  PGRST_HOST: tooljet-postgrest-service # do not change it
+  PGRST_DB_URI: postgresql://postgres:supersecretpassword@tooljet-postgres-service/tooljet_applications_db # ensure that the password is the same as postgres.postgresPassword and the db name is the same as env.TOOLJET_DB
+  PGRST_JWT_SECRET: 56a83d6aa10efc317c98227b11bb45c29605e5bfb3978304d15235a7ee03e5c7 # openssl rand -hex 32
+  REDIS_HOST: tooljet-redis-service # do not change it
+  REDIS_PORT: 6379
+  SERVE_CLIENT: true
+  PORT: 3000
+  PGRST_SERVER_PORT: 3000
+  ORM_LOGGING: all
+  DISABLE_TOOLJET_TELEMETRY: true
+  SMTP_PORT: 587
+  SMTP_DOMAIN: smtp.domain.com
+  SMTP_USERNAME: user@domain.com
+  SMTP_PASSWORD: supersecretpassword
+  DEFAULT_FROM_EMAIL: user@domain.com
+
+ingress:
+  hostname: tooljet.k8s.ad.mikolajmurawski.pl
+  annotations:
+    # if you want you can provide additional nginx ingress annotations here

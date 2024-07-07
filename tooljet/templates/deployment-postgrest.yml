@@ -1,0 +1,35 @@
+{{- if .Values.postgrest.enable }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.masterName }}-postgrest-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.masterName }}-postgrest
+spec:
+  replicas: {{ .Values.postgrest.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.masterName }}-postgrest
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.masterName }}-postgrest
+    spec:
+      containers:
+        - name: postgrest
+          image: {{ .Values.postgrest.image }}:{{ .Values.postgrest.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: {{ .Values.env.PGRST_SERVER_PORT }}
+          resources:
+            requests:
+              cpu: {{ .Values.postgrestResources.requests.cpu }}
+              memory: {{ .Values.postgrestResources.requests.memory }}
+            limits:
+              cpu: {{ .Values.postgrestResources.limits.cpu }}
+              memory: {{ .Values.postgrestResources.limits.memory }}
+          envFrom:
+            - secretRef:
+                name: tooljet-secret
+{{- end }}

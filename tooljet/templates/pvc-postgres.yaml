@@ -1,0 +1,14 @@
+{{ if .Values.postgres.enable }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.masterName }}-postgres-pvc
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.postgres.volumeSize }}
+  storageClassName: sc-nfs
+{{ end }}
