@@ -11,7 +11,7 @@ microk8s.config > ~/.kube/config
 ```
 3. Enable metal load balancer addon to easily access your internal kubernetes resources from the outside. You can specify a single or a pool of IP addresses to be used by the metal load balancer. In my case I want just one load balancer to be attached to my cluster at all.
 ```
-microk8s enable metallb:10.200.0.33
+microk8s enable metallb:10.200.0.33/24
 ```
 4. Enable nginx ingress controller addon to route network traffic to proper services.
 ```
